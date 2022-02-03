@@ -44,6 +44,7 @@ namespace IGS520b.starter.SampleGame
             }
 
             _characterTransform = characterControllers[0].transform;
+            _startPosition = _characterTransform.position;
             timeText.text = "Move to start";
             pointsText.text = "";
         }
