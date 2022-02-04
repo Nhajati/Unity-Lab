@@ -51,8 +51,10 @@ namespace IGS520b.starter.SampleGame
 
         void OnPointScored(GamePoint gamePoint)
         {
+            gamePoint.transform.Rotate(90.0f, 0.0f, 0.0f, Space.Self);
+            gamePoint.transform.Translate(Vector3.down, Space.World);
             _points += gamePoint.points;
-            Destroy(gamePoint.gameObject);
+            // Destroy(gamePoint.gameObject);
         }
 
         // Update is called once per frame
