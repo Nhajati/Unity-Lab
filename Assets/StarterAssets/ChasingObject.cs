@@ -2,15 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace IGS520b.starter.SampleGame
+{    
 public class ChasingObject : MonoBehaviour
 {
+
+    // GameManager gm;
+    // NEED TO SAY CHASE AFTER START
     Vector3 direction;
     Vector3 characterSize;
     Vector3 characterMidPoint;
     CharacterController myCharacter;
+    bool isChasing;
+    // GameManager gameManager;
 
     void Start()
     {
+        
         // Find the character
         var character = FindObjectsOfType<CharacterController>();
         myCharacter = character[0];
@@ -21,9 +29,11 @@ public class ChasingObject : MonoBehaviour
 
     }
 
-
     void Update()
     {
+        GameManager[] gameManager = FindObjectsOfType<GameManager>();
+
+        if(gameManager[0].GetStartChasing()){
         // Update the midpoint position of the character
         characterMidPoint.x = myCharacter.transform.position.x;
         characterMidPoint.y = characterSize.y / 2;
@@ -32,9 +42,18 @@ public class ChasingObject : MonoBehaviour
         
         // Make the enemy object face the character
         transform.forward = direction;
-        // Debug.DrawRay(transform.position, transform.forward, Color.red); // Need to turn on Gizmos to make it show!
+        Debug.DrawRay(transform.position, transform.forward, Color.red); // Need to turn on Gizmos to make it show!
 
         // Make the enemy object follow the character 
         transform.Translate(direction * 0.005f);
+        }
+       
     }
+
+    void CrashedIntoCharacter() 
+    {
+        // if(crashed)
+        // health -= 1;
+    }
+}
 }

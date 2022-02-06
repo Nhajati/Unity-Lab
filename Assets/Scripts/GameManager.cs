@@ -33,10 +33,22 @@ namespace IGS520b.starter.SampleGame
         private float _timeRemaining;
         private float _points;
         private float _maxPoints;
+        private bool startChasing;
+
+        public GameObject heart1, heart2, heart3, gameOver;
+        public static int health;
+
+        public bool GetStartChasing(){
+            return startChasing;
+        }
 
         // Start is called before the first frame update
         void Start()
         {
+            startChasing = false;
+
+            // HealthInitialCheck();
+
             CharacterController[] characterControllers = FindObjectsOfType<CharacterController>();
             if (characterControllers.Length != 1)
             {
@@ -47,6 +59,51 @@ namespace IGS520b.starter.SampleGame
             _startPosition = _characterTransform.position;
             timeText.text = "Move to start";
             pointsText.text = "";
+        }
+
+        void HealthInitialCheck() 
+        {
+            health = 3;
+            heart1.gameObject.SetActive(true);
+            heart2.gameObject.SetActive(true);
+            heart3.gameObject.SetActive(true);
+            gameOver.gameObject.SetActive(false);
+        }
+
+        void HealthCheck() 
+        {
+            if(health > 3)
+                health = 3;
+            
+            switch(health)
+            {
+            case 3:
+                heart1.gameObject.SetActive(true);
+                heart2.gameObject.SetActive(true);
+                heart3.gameObject.SetActive(true);
+                break;
+
+            case 2:
+                heart1.gameObject.SetActive(true);
+                heart2.gameObject.SetActive(true);
+                heart3.gameObject.SetActive(false);
+                break; 
+
+            case 1:
+                heart1.gameObject.SetActive(true);
+                heart2.gameObject.SetActive(false);
+                heart3.gameObject.SetActive(false);
+                break;
+
+            case 0:
+                heart1.gameObject.SetActive(false);
+                heart2.gameObject.SetActive(false);
+                heart3.gameObject.SetActive(false);
+                // Time.timeScale = 0;
+                _gameState = GameState.stopped;
+                timeText.text += "\nGameOver"; // WHY \N?!?
+                break;    
+            }
         }
 
         void OnPointScored(GamePoint gamePoint)
@@ -67,6 +124,7 @@ namespace IGS520b.starter.SampleGame
                     if ((_startPosition - _characterTransform.transform.position).magnitude > startDistance)
                     {
                         Debug.Log($"Game Started");
+                        startChasing = true;
                         _gameState = GameState.started;
                         _gameStartTime = Time.fixedTime;
                         _timeRemaining = timeLimit;
@@ -79,6 +137,9 @@ namespace IGS520b.starter.SampleGame
                     }
                     break;
                 case GameState.started:
+                    startChasing = true;
+                    // HealthCheck();
+
                     _timeRemaining = timeLimit - (Time.fixedTime - _gameStartTime);
 
                     timeText.text = $"Time remaining: {Mathf.FloorToInt(_timeRemaining / 60)}:{_timeRemaining % 60.0f}";
@@ -86,6 +147,7 @@ namespace IGS520b.starter.SampleGame
                     
                     if (_timeRemaining <= 0 || _points == _maxPoints)
                     {
+                        startChasing = false;
                         _gameState = GameState.stopped;
                         if (_timeRemaining <= 0)
                         {
@@ -104,6 +166,7 @@ namespace IGS520b.starter.SampleGame
 
                     break;
                 case GameState.stopped:
+                    startChasing = false;
                     break;
             }
         }
