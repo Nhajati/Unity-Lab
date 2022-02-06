@@ -10,13 +10,19 @@ public class ChasingObject : MonoBehaviour
     Vector3 characterSize;
     Vector3 characterMidPoint;
     CharacterController myCharacter;
+    GameManager[] gameManager;
     bool robotCrashed;
+    bool stillCrashing;
+    Vector3 crashLocation;
     float minDistance;
     float nowDistance;
 
     void Start()
     {
+        gameManager = FindObjectsOfType<GameManager>();
         robotCrashed = false;
+        stillCrashing = false;
+        crashLocation = new Vector3(0.0f, 0.0f, 0.0f);
         
         // Find the character
         var character = FindObjectsOfType<CharacterController>();
@@ -30,9 +36,6 @@ public class ChasingObject : MonoBehaviour
 
     void Update()
     {
-        GameManager[] gameManager = FindObjectsOfType<GameManager>();
-        // Debug.Log(HasCrashedIntoCharacter());
-
         if(gameManager[0].GetStartChasing()){
 
             if(HasCrashedIntoCharacter()){
@@ -67,11 +70,10 @@ public class ChasingObject : MonoBehaviour
         nowDistance = Mathf.Sqrt(Mathf.Pow(transform.position.x - theCharacter[0].transform.position.x, 2) + Mathf.Pow(transform.position.z - theCharacter[0].transform.position.z, 2));
         // minDistance = Mathf.Abs(robotCollider.radius - Mathf.Sqrt(Mathf.Pow(characterCollider.bounds.size.x, 2) + Mathf.Pow(characterCollider.bounds.size.z, 2)));
         minDistance = 0.9f;
-        Debug.Log(nowDistance);
-        Debug.Log(minDistance);
-        Debug.Log(robotCrashed);
         
-        if(nowDistance <= minDistance){
+        //TODO:
+        // if(nowDistance <= minDistance && stillCrashing == false){
+            if(nowDistance <= minDistance){
             robotCrashed = true;
         } else {
             robotCrashed = false;
@@ -82,7 +84,25 @@ public class ChasingObject : MonoBehaviour
     // What to do when the robot crashes into the character
     void CrashedIntoCharacter()
     {
-        // health -= 1;
+        var theCharacter = FindObjectsOfType<CharacterController>();
+        crashLocation = theCharacter[0].transform.position;
+        
+        //TODO:
+        // if ((theCharacter[0].transform.position - crashLocation).magnitude < 1.0f){
+        //     stillCrashing = true;
+        // } else {
+        //     stillCrashing = false;
+        // }
+        
+        // if(gameManager[0].GetHealth < 0){
+        //     //TODO: STOP THE GAME
+        // }
+        // TODO: ADD TAG TO CRASH ONLY ONCE 
+
+        gameManager[0].SetHealth(gameManager[0].GetHealth() - 1);
+        Debug.Log(gameManager[0].GetHealth());
+        gameManager[0].SetGameState(2);
+
     }
 }
 }

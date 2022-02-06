@@ -36,10 +36,26 @@ namespace IGS520b.starter.SampleGame
         private bool startChasing;
 
         public GameObject heart1, heart2, heart3, gameOver;
-        public static int health;
+        private int health;
+
+        public int GetGameState(){
+            return (int)_gameState;
+        } 
+
+        public void SetGameState(int gameStateNo){
+            this._gameState = (GameState)gameStateNo;
+        }
 
         public bool GetStartChasing(){
             return startChasing;
+        }
+
+        public int GetHealth(){
+            return this.health;
+        }
+
+        public void SetHealth(int health){
+            this.health = health;
         }
 
         // Start is called before the first frame update
