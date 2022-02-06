@@ -56,7 +56,7 @@ public class ChasingObject : MonoBehaviour
             // Debug.DrawRay(transform.position, transform.forward, Color.red); // Need to turn on Gizmos to make it show!
 
             // Make the enemy object follow the character 
-            transform.Translate(direction * 0.0005f);
+            transform.Translate(direction * 0.002f);
 
             }
         }
