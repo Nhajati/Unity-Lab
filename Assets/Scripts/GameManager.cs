@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+// TODO: Put health hearts into play, and disable one when the robot crashes into the character.
+
 namespace IGS520b.starter.SampleGame
 {    
     public class GameManager : MonoBehaviour
@@ -35,9 +37,10 @@ namespace IGS520b.starter.SampleGame
         private float _maxPoints;
         private bool startChasing;
 
-        public GameObject heart1, heart2, heart3, gameOver;
+        public GameObject heart1, heart2, heart3; //, gameOver;
         private int health;
 
+        // TODO: These functions will be used in the next version of the game including the health hearts.
         public int GetGameState(){
             return (int)_gameState;
         } 
@@ -45,6 +48,7 @@ namespace IGS520b.starter.SampleGame
         public void SetGameState(int gameStateNo){
             this._gameState = (GameState)gameStateNo;
         }
+        
 
         public bool GetStartChasing(){
             return startChasing;
@@ -61,9 +65,13 @@ namespace IGS520b.starter.SampleGame
         // Start is called before the first frame update
         void Start()
         {
+            heart1 = GameObject.Find("heart1");
+            heart2 = GameObject.Find("heart2");
+            heart3 = GameObject.Find("heart3");
             startChasing = false;
-
-            // HealthInitialCheck();
+            
+            // TODO:
+            HealthInitialCheck();
 
             CharacterController[] characterControllers = FindObjectsOfType<CharacterController>();
             if (characterControllers.Length != 1)
@@ -77,15 +85,17 @@ namespace IGS520b.starter.SampleGame
             pointsText.text = "";
         }
 
+        // TODO:
         void HealthInitialCheck() 
         {
             health = 3;
             heart1.gameObject.SetActive(true);
             heart2.gameObject.SetActive(true);
             heart3.gameObject.SetActive(true);
-            gameOver.gameObject.SetActive(false);
+            // gameOver.gameObject.SetActive(false);
         }
 
+        // TODO:
         void HealthCheck() 
         {
             if(health > 3)
@@ -117,7 +127,7 @@ namespace IGS520b.starter.SampleGame
                 heart3.gameObject.SetActive(false);
                 // Time.timeScale = 0;
                 _gameState = GameState.stopped;
-                timeText.text += "\nGameOver"; // WHY \N?!?
+                // timeText.text += "\nGameOver"; // WHY \N?!?
                 break;    
             }
         }
@@ -126,8 +136,9 @@ namespace IGS520b.starter.SampleGame
         {
             gamePoint.transform.Rotate(90.0f, 0.0f, 0.0f, Space.Self);
             gamePoint.transform.Translate(Vector3.down, Space.World);
+            var gamePointCollider = gamePoint.GetComponent<Collider>();
+            gamePointCollider.enabled = false;
             _points += gamePoint.points;
-            // Destroy(gamePoint.gameObject);
         }
 
         // Update is called once per frame
@@ -154,6 +165,7 @@ namespace IGS520b.starter.SampleGame
                     break;
                 case GameState.started:
                     startChasing = true;
+                    // TODO:
                     // HealthCheck();
 
                     _timeRemaining = timeLimit - (Time.fixedTime - _gameStartTime);
@@ -182,6 +194,7 @@ namespace IGS520b.starter.SampleGame
 
                     break;
                 case GameState.stopped:
+                // TODO:
                     startChasing = false;
                     break;
             }

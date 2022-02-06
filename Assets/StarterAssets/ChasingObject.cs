@@ -21,6 +21,10 @@ public class ChasingObject : MonoBehaviour
     {
         gameManager = FindObjectsOfType<GameManager>();
         robotCrashed = false;
+
+        // TODO:
+        // stillCrashing and crashLocation are used to check if after the robot has crashed the character, the character has moved or not.
+        // This will help avoid fake crash detections. 
         stillCrashing = false;
         crashLocation = new Vector3(0.0f, 0.0f, 0.0f);
         
@@ -49,10 +53,10 @@ public class ChasingObject : MonoBehaviour
         
             // Make the enemy object face the character
             transform.forward = direction;
-            Debug.DrawRay(transform.position, transform.forward, Color.red); // Need to turn on Gizmos to make it show!
+            // Debug.DrawRay(transform.position, transform.forward, Color.red); // Need to turn on Gizmos to make it show!
 
             // Make the enemy object follow the character 
-            transform.Translate(direction * 0.005f);
+            transform.Translate(direction * 0.0005f);
 
             }
         }
@@ -71,7 +75,7 @@ public class ChasingObject : MonoBehaviour
         // minDistance = Mathf.Abs(robotCollider.radius - Mathf.Sqrt(Mathf.Pow(characterCollider.bounds.size.x, 2) + Mathf.Pow(characterCollider.bounds.size.z, 2)));
         minDistance = 0.9f;
         
-        //TODO:
+        //TODO: check if the crash detected is true or fake (if it is considering the previous crash as a new one)
         // if(nowDistance <= minDistance && stillCrashing == false){
             if(nowDistance <= minDistance){
             robotCrashed = true;
@@ -81,6 +85,7 @@ public class ChasingObject : MonoBehaviour
         return robotCrashed;
     }
 
+    // TODO:
     // What to do when the robot crashes into the character
     void CrashedIntoCharacter()
     {
@@ -100,7 +105,7 @@ public class ChasingObject : MonoBehaviour
         // TODO: ADD TAG TO CRASH ONLY ONCE 
 
         gameManager[0].SetHealth(gameManager[0].GetHealth() - 1);
-        Debug.Log(gameManager[0].GetHealth());
+        // Debug.Log(gameManager[0].GetHealth());
         gameManager[0].SetGameState(2);
 
     }
